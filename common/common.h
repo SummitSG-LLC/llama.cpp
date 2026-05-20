@@ -663,6 +663,18 @@ struct common_params {
     bool models_autoload = true;        // automatically load models when requested via the router server
     std::string models_preset_hf = "";  // show a warning about remote presets on router loaded (if not empty)
 
+    // Remote (proxy-only) model entries declared via --remote-model. The router
+    // does not spawn a child for these; it forwards requests to `url`.
+    struct remote_model_decl {
+        std::string name;     // router-side identifier (and default upstream model id)
+        std::string url;      // e.g. http://127.0.0.1:8082 or https://host/base
+        std::string api_key;  // bearer token (env-expanded at parse time)
+        std::string model_id; // optional override for JSON "model" on forward
+        std::vector<std::string> aliases;
+        std::vector<std::string> tags;
+    };
+    std::vector<remote_model_decl> remote_models;
+
     bool log_json = false;
 
     std::string slot_save_path;
